@@ -10,6 +10,8 @@ app = Flask(__name__)
 # -----------------------------
 # CORS Headers Middleware
 # -----------------------------
+
+
 @app.after_request
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -17,10 +19,14 @@ def add_cors_headers(response):
     response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
     return response
 
+
 # -----------------------------
 # Load Reference Data
 # -----------------------------
 base_dir = os.path.dirname(os.path.abspath(__file__))
+claims_probability_model = joblib.load(
+    os.path.join(base_dir, "Pet", "claims_probability_model.pkl")
+)
 
 pet_data_path = os.path.join(base_dir, 'PetData.csv')
 if os.path.exists(pet_data_path):
@@ -32,7 +38,8 @@ if os.path.exists(pet_data_path):
         .unique()
     )
 else:
-    BREEDS = ["Labrador Retriever", "German Shepherd", "Golden Retriever", "Bulldog", "Beagle", "Poodle", "Unknown"]
+    BREEDS = ["Labrador Retriever", "German Shepherd",
+              "Golden Retriever", "Bulldog", "Beagle", "Poodle", "Unknown"]
 
 # -----------------------------
 # Load Original PawBudget Models
@@ -255,4 +262,4 @@ def predict():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(f"🐾 PawBudget engine running on http://127.0.0.1:{port}")
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)

@@ -24,19 +24,16 @@ def add_cors_headers(response):
 # Load Reference Data
 # -----------------------------
 base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Load models (no "Pet" subfolder needed since app.py is already inside it)
 claims_probability_model = joblib.load(
-    os.path.join(base_dir, "Pet", "claims_probability_model.pkl")
+    os.path.join(base_dir, "claims_probability_model.pkl")
 )
 
-pet_data_path = os.path.join(base_dir, 'PetData.csv')
+pet_data_path = os.path.join(base_dir, "PetData.csv")
 if os.path.exists(pet_data_path):
     pet_data = pd.read_csv(pet_data_path)
-    BREEDS = sorted(
-        pet_data['Breed']
-        .dropna()
-        .astype(str)
-        .unique()
-    )
+    BREEDS = sorted(pet_data["Breed"].dropna().astype(str).unique())
 else:
     BREEDS = ["Labrador Retriever", "German Shepherd",
               "Golden Retriever", "Bulldog", "Beagle", "Poodle", "Unknown"]
